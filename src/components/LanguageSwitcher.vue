@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <label class="label" for="languageSwitcher">{{ t('M000001') }}</label>
         <select name="languageSwitcher" id="languageSwitcher" v-model="locale" @change="changeLanguage">
             <option v-for="(language, code) in languages" :key="code" :value="code">
@@ -27,5 +27,10 @@
     .label{
         margin-right: 0.5rem;
         color: #edc08c;
+    }
+
+    .container{
+        text-align: right;
+        margin-bottom: 3rem;
     }
 </style>
