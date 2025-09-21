@@ -12,6 +12,11 @@ const messages = {
         M000008: 'generate',
         M000009: 'reset',
         M000010: 'participants',
+        M000011: 'splitting bill with',
+        M000012: 'total amount',
+        M000013: 'enter amount',
+        M000014: 'total bill',
+        M000015: 'receipt',
     },
     cn: {
         M000001: '语言',
@@ -24,6 +29,11 @@ const messages = {
         M000008: '生成',
         M000009: '重置',
         M000010: '参与者们',
+        M000011: '分摊账单',
+        M000012: '总金额',
+        M000013: '输入金额',
+        M000014: '账单总额',
+        M000015: '收据',
     },
 }
 
