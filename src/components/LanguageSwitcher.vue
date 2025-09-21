@@ -61,7 +61,7 @@
     .container{
         display: flex;
         justify-content: flex-end;
-        margin-bottom: 3rem;
+        margin-bottom: 1.5rem;
     }
 
     .dropdown {
