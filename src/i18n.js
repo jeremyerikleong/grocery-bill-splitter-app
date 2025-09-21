@@ -17,6 +17,13 @@ const messages = {
         M000013: 'enter amount',
         M000014: 'total bill',
         M000015: 'receipt',
+        M000016: 'please enter your total amount',
+        M000017: 'participant names cannot be empty',
+        M000018: 'close',
+        M000019: 'reminder',
+        M000020: 'reset form',
+        M000021: 'this action cannot be undone',
+        M000022: 'confirm',
     },
     cn: {
         M000001: '语言',
@@ -34,6 +41,13 @@ const messages = {
         M000013: '输入金额',
         M000014: '账单总额',
         M000015: '收据',
+        M000016: '请输入您的总金额',
+        M000017: '参与者姓名不能为空',
+        M000018: '关闭',
+        M000019: '提醒',
+        M000020: '重置表格',
+        M000021: '此操作无法撤消',
+        M000022: '确认',
     },
 }
 
