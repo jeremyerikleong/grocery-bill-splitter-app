@@ -1,4 +1,19 @@
 <template>
+  <Modal v-if="reminderModalIsVisible"
+    :message="modalMessage"
+    :cta="false"
+    @close="reminderModalIsVisible = false"
+  />
+
+  <Modal v-if="confirmationModalIsVisible"
+    :message="modalMessage"
+    :title="t('M000020' /* reset form */)"
+    :cta="true"
+    :action="t('M000022' /* confirm */)"
+    @close="confirmationModalIsVisible = false"
+    @cta="confirmResetForm"
+  />
+
   <div v-if="count == 0">
     <label class="">{{ t('M000003') /* enter the number of participants */ }}:</label>
     <br />
@@ -76,13 +91,17 @@
   import { useI18n } from 'vue-i18n'; 
   import { ref, watch } from 'vue';
   import TotalBill from './TotalBill.vue';
+  import Modal from './Modal.vue';
 
   const { t } = useI18n();
   const count = ref(0);     
   const fieldNames = ref([]);
   const fields = ref([]);
   const formGenerated = ref(false);
-  const totalAmount = ref(0)
+  const totalAmount = ref(0);
+  const reminderModalIsVisible = ref(false);
+  const confirmationModalIsVisible = ref(false);
+  const modalMessage = ref('');
 
   watch(count, (newCount) => {
     if (!formGenerated.value) {
@@ -91,15 +110,34 @@
   })
 
   function generateForm() {
-    fields.value = Array(count.value).fill('')
-    formGenerated.value = true
+    if (totalAmount.value <= 0) {
+      modalMessage.value = t('M000016' /* please enter your amount */);
+      reminderModalIsVisible.value = true;
+      return;
+    }
+
+    if (fieldNames.value.some(name => name.trim() === "")) {
+      modalMessage.value = t('M000017' /* participant names cannot be empty */);
+      reminderModalIsVisible.value = true;
+      return;
+    }
+
+    fields.value = Array(count.value).fill('');
+    formGenerated.value = true;
   }
 
   function resetForm() {
-    count.value = 0
-    fieldNames.value = []
-    fields.value = []
-    formGenerated.value = false
+    modalMessage.value = t('M000021' /* this action cannot be undone */);
+    confirmationModalIsVisible.value = true;
+  }
+
+  function confirmResetForm(){
+    count.value = 0;
+    fieldNames.value = [];
+    fields.value = [];
+    formGenerated.value = false;
+    totalAmount.value = 0;
+    confirmationModalIsVisible.value = false;
   }
 
   function fetchTotalAmount(amount) {
@@ -176,6 +214,13 @@
     padding: 1rem 2rem;
     text-transform: capitalize;
     font-weight: 700;
+    border: none;
+    outline: none;
+  }
+
+  .btn:focus, .btn:active {
+    outline: none;
+    box-shadow: none;
   }
 
   .btn-primary {
