@@ -12,9 +12,10 @@
 
 <style scoped>
   .wrapper{
-    width: clamp(100%, 100vw, 540px);
+    max-width: 480px;
     min-height: 100dvh;
     background-color: #48426D;
     padding: 2rem;
+    margin: 0 auto;
   }
 </style>
