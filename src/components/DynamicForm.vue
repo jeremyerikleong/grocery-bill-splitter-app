@@ -14,6 +14,7 @@
     @cta="confirmResetForm"
   />
 
+  <!-- number of participants -->
   <div v-if="count == 0">
     <label class="">{{ t('M000003') /* enter the number of participants */ }}:</label>
     <br />
@@ -24,6 +25,7 @@
     />
   </div>
 
+  <!-- participants name and total amount input -->
   <div v-if="count > 0 && !formGenerated" class="box box1">
     <h3 class="title">{{ t('M000004') /* customize participant names */ }}</h3>
 
@@ -52,11 +54,60 @@
     </button>
   </div>
 
-  <div v-if="formGenerated" class="box box1 box2">
-    <h3>{{ t('M000014') /* total bill */}}</h3>
-    <h3>RM {{ totalAmount }}</h3>
+  <!-- total display -->
+  <div v-if="formGenerated" class="box box1">
+    <div class="box-with-flex">
+      <h3>{{ t('M000014') /* total bill */}}</h3>
+      <h3>RM {{ totalAmount }}</h3>
+    </div>
+
+    <div class="box-with-flex">
+      <h3 class="readonly">{{ t('M000023' /* comparing amount */) }}</h3>
+      <h3 class="readonly">RM {{ comparingTotalAmount }}</h3>
+    </div>
   </div>
 
+  <!-- calculator -->
+  <div v-if="formGenerated" class="box box-calculator">
+    <h3 class="title">{{ t('M000024') /* expenses */ }}</h3>
+
+    <div class="calculator-input">
+      <label>{{ t('M000025') /* expense amount */ }}:</label>
+      <input type="number" v-model.number="expenseAmount" min="0" />
+
+      <label>{{ t('M000026') /* choose operation */ }}:</label>
+
+      
+      <select v-model="operation">
+        <option value="add">{{ t('M000027') /* add */ }}</option>
+        <option value="subtract">{{ t('M000028') /* subtract */ }}</option>
+      </select>
+
+      <label>{{ t('M000029') /* choose participants */ }}:</label>
+      <div class="checkbox-group">
+        <div v-for="(name, index) in fieldNames" :key="'checkbox-'+index">
+          <input
+            type="checkbox"
+            :id="'participant-'+index"
+            v-model="selectedParticipants"
+            :value="index"
+            class="checkbox"
+          />
+          <label :for="'participant-'+index">{{ name || t('M000006') + (index+1) }}</label>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-primary"
+        @click="applyExpense"
+        :disabled="expenseAmount <= 0 || selectedParticipants.length === 0"
+      >
+        {{ operation === 'add' ? t('M000030') /* add expense */ : t('M000031') /* subtract expense */ }}
+      </button>
+    </div>
+  </div>
+
+  <!-- receipt -->
   <div v-if="formGenerated" class="box box3">
     <h3 class="title receipt">{{ t('M000015') /* receipt */}}</h3>
 
@@ -73,7 +124,9 @@
         class="participant-layout"
       >
         <h3>{{ fieldNames[index] || t('M000006') /* participants */ + (index + 1) }} </h3>
-        <p class="amount">RM 0</p>
+        <p class="amount">
+          {{ participantTotals[index].toFixed(2) }}
+        </p>
       </div>
     </div>
 
@@ -99,15 +152,25 @@
   const fields = ref([]);
   const formGenerated = ref(false);
   const totalAmount = ref(0);
+  const comparingTotalAmount = ref(0);
   const reminderModalIsVisible = ref(false);
   const confirmationModalIsVisible = ref(false);
   const modalMessage = ref('');
 
+  const expenseAmount = ref(0);
+  const selectedParticipants = ref([]);
+  const operation = ref('add');
+  const participantTotals = ref([]);
+
   watch(count, (newCount) => {
     if (!formGenerated.value) {
-      fieldNames.value = Array(newCount).fill('')
+      fieldNames.value = Array(newCount).fill('');
     }
-  })
+  });
+
+  watch(fields, (newFields) => {
+    participantTotals.value = Array(newFields.length).fill(0);
+  });
 
   function generateForm() {
     if (totalAmount.value <= 0) {
@@ -137,11 +200,30 @@
     fields.value = [];
     formGenerated.value = false;
     totalAmount.value = 0;
+    comparingTotalAmount.value = 0;
     confirmationModalIsVisible.value = false;
   }
 
   function fetchTotalAmount(amount) {
     totalAmount.value = amount;
+  }
+
+  function applyExpense() {
+    const share = expenseAmount.value / selectedParticipants.value.length;
+
+    selectedParticipants.value.forEach(index => {
+      if (operation.value === 'add') {
+        participantTotals.value[index] += share;
+        comparingTotalAmount.value += expenseAmount.value;
+      }else{
+        participantTotals.value[index] -= share;
+        comparingTotalAmount.value -= expenseAmount.value;
+      }
+    });
+
+    expenseAmount.value = 0;
+    selectedParticipants.value = [];
+    operation.value = 'add';
   }
 </script>
 
@@ -166,24 +248,30 @@
 
   .box{
     max-width: 540px;
-    padding-block: 2rem;
+    padding: 2rem;
     margin-block: 1rem;
     border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
   }
 
   .box1{
     background-color: #373258;
   }
 
-  .box2{
+  .box-with-flex{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-inline: 2rem;
 
     h3{
       text-transform: capitalize;
       margin-block: 0;
+    }
+
+    .readonly{
+      color: #a7a7a778;
     }
   }
 
@@ -253,7 +341,7 @@
     height: 3px;
     margin-block: 2rem;
     background-image: linear-gradient(to right, #888 50%, transparent 50%);
-    background-size: 20px 2px;
+    background-size: 24px 2px;
     background-repeat: repeat-x;
 
     .divider-dot {
@@ -266,11 +354,30 @@
     }
 
     .span-1 {
-      left: -1rem;
+      left: -3rem;
     }
 
     .span-2 {
-      right: -1rem;
+      right: -3rem;
     }
+  }
+
+  .box-calculator {
+    background-color: #373258;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-block: 1rem;
+  }
+
+  .calculator-input {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 </style>
