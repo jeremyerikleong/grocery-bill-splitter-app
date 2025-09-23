@@ -214,12 +214,16 @@
     selectedParticipants.value.forEach(index => {
       if (operation.value === 'add') {
         participantTotals.value[index] += share;
-        comparingTotalAmount.value += expenseAmount.value;
       }else{
         participantTotals.value[index] -= share;
-        comparingTotalAmount.value -= expenseAmount.value;
       }
     });
+
+    if (operation.value === 'add') {
+      comparingTotalAmount.value += expenseAmount.value;
+    }else{
+      comparingTotalAmount.value -= expenseAmount.value;
+    }
 
     expenseAmount.value = 0;
     selectedParticipants.value = [];
