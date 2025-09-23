@@ -68,44 +68,11 @@
   </div>
 
   <!-- calculator -->
-  <div v-if="formGenerated" class="box box-calculator">
-    <h3 class="title">{{ t('M000024') /* expenses */ }}</h3>
-
-    <div class="calculator-input">
-      <label>{{ t('M000025') /* expense amount */ }}:</label>
-      <input type="number" v-model.number="expenseAmount" min="0" />
-
-      <label>{{ t('M000026') /* choose operation */ }}:</label>
-
-      
-      <select v-model="operation">
-        <option value="add">{{ t('M000027') /* add */ }}</option>
-        <option value="subtract">{{ t('M000028') /* subtract */ }}</option>
-      </select>
-
-      <label>{{ t('M000029') /* choose participants */ }}:</label>
-      <div class="checkbox-group">
-        <div v-for="(name, index) in fieldNames" :key="'checkbox-'+index">
-          <input
-            type="checkbox"
-            :id="'participant-'+index"
-            v-model="selectedParticipants"
-            :value="index"
-            class="checkbox"
-          />
-          <label :for="'participant-'+index">{{ name || t('M000006') + (index+1) }}</label>
-        </div>
-      </div>
-
-      <button
-        class="btn btn-primary"
-        @click="applyExpense"
-        :disabled="expenseAmount <= 0 || selectedParticipants.length === 0"
-      >
-        {{ operation === 'add' ? t('M000030') /* add expense */ : t('M000031') /* subtract expense */ }}
-      </button>
-    </div>
-  </div>
+  <Calculator
+    v-if="formGenerated"
+    :field-names="fieldNames"
+    @apply-expense="applyExpense"
+  />
 
   <!-- receipt -->
   <div v-if="formGenerated" class="box box3">
@@ -125,7 +92,7 @@
       >
         <h3>{{ fieldNames[index] || t('M000006') /* participants */ + (index + 1) }} </h3>
         <p class="amount">
-          {{ participantTotals[index].toFixed(2) }}
+          RM {{ participantTotals[index].toFixed(2) }}
         </p>
       </div>
     </div>
@@ -145,6 +112,7 @@
   import { ref, watch } from 'vue';
   import TotalBill from './TotalBill.vue';
   import Modal from './Modal.vue';
+  import Calculator from './Calculator.vue';
 
   const { t } = useI18n();
   const count = ref(0);     
@@ -156,10 +124,6 @@
   const reminderModalIsVisible = ref(false);
   const confirmationModalIsVisible = ref(false);
   const modalMessage = ref('');
-
-  const expenseAmount = ref(0);
-  const selectedParticipants = ref([]);
-  const operation = ref('add');
   const participantTotals = ref([]);
 
   watch(count, (newCount) => {
@@ -208,27 +172,23 @@
     totalAmount.value = amount;
   }
 
-  function applyExpense() {
-    const share = expenseAmount.value / selectedParticipants.value.length;
+  function applyExpense({ amount, participants, operation }) {
+    const share = amount / participants.length;
 
-    selectedParticipants.value.forEach(index => {
-      if (operation.value === 'add') {
+    participants.forEach(index => {
+      if (operation === 'add') {
         participantTotals.value[index] += share;
-      }else{
+      } else {
         participantTotals.value[index] -= share;
       }
     });
-
-    if (operation.value === 'add') {
-      comparingTotalAmount.value += expenseAmount.value;
+    
+    if (operation === 'add') {
+      comparingTotalAmount.value += amount;
     }else{
-      comparingTotalAmount.value -= expenseAmount.value;
+      comparingTotalAmount.value -= amount;
     }
-
-    expenseAmount.value = 0;
-    selectedParticipants.value = [];
-    operation.value = 'add';
-  }
+}
 </script>
 
 <style scoped>  
@@ -364,24 +324,5 @@
     .span-2 {
       right: -3rem;
     }
-  }
-
-  .box-calculator {
-    background-color: #373258;
-    padding: 2rem;
-    border-radius: 10px;
-    margin-block: 1rem;
-  }
-
-  .calculator-input {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
   }
 </style>
