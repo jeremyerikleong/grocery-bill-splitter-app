@@ -7,20 +7,34 @@
             <input type="number" v-model.number="localExpenseAmount" min="0" />
 
             <label>{{ t('M000026') /* choose operation */ }}:</label>
-            <select v-model="localOperation">
-                <option value="add">{{ t('M000027') /* add */ }}</option>
-                <option value="subtract">{{ t('M000028') /* subtract */ }}</option>
-            </select>
+            <div>
+                <label>
+                    <input
+                        type="radio"
+                        value="add"
+                        v-model="localOperation"
+                    />
+                    {{ t('M000027') /* add */ }}
+                </label>
+
+                <label>
+                    <input
+                        type="radio"
+                        value="subtract"
+                        v-model="localOperation"
+                    />
+                    {{ t('M000028') /* subtract */ }}
+                </label>
+            </div>
 
             <label>{{ t('M000029') /* choose participants */ }}:</label>
             <div class="checkbox-group">
                 <div v-for="(name, index) in fieldNames" :key="'checkbox-'+index">
                     <input
-                        type="checkbox"
+                        type="radio"
                         :id="'participant-'+index"
                         v-model="localSelectedParticipants"
                         :value="index"
-                        class="checkbox"
                     />
                     <label :for="'participant-'+index">{{ name || t('M000006') + (index + 1) }}</label>
                 </div>
