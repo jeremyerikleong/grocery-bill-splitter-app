@@ -58,12 +58,12 @@
   <div v-if="formGenerated" class="box box1">
     <div class="box-with-flex">
       <h3>{{ t('M000014') /* total bill */}}</h3>
-      <h3>RM {{ totalAmount }}</h3>
+      <h3>RM {{ totalAmount.toFixed(2) }}</h3>
     </div>
 
     <div class="box-with-flex">
       <h3 class="readonly">{{ t('M000023' /* comparing amount */) }}</h3>
-      <h3 class="readonly">RM {{ comparingTotalAmount }}</h3>
+      <h3 class="readonly">RM {{ Math.round(comparingTotalAmount).toFixed(2) }}</h3>
     </div>
   </div>
 
@@ -203,6 +203,10 @@
     border-radius: 8px;
     border: none;
     outline: none;
+
+    &::placeholder {
+      text-transform: capitalize;
+    }
   }
 
   .title{

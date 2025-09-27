@@ -1,6 +1,6 @@
 <template>
     <footer>
-        <p>© {{ currentYear }} Jeremy Erik Leong. This project was developed using
+        <p>©{{ currentYear }} Jeremy Erik Leong. This project was developed using
             <a href="https://vuejs.org/" target="_blank"> Vue.js</a>, 
             <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank"> CSS</a>, 
             and deployed via 
