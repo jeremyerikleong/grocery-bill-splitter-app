@@ -14,7 +14,6 @@
 
 <style scoped>
   .wrapper{
-    max-width: 480px;
     min-height: 100dvh;
     background-color: #48426D;
     padding: 2rem;
