@@ -101,7 +101,7 @@
     }
 
     .dropdown-menu-item:hover {
-        background: #f5f5f5;
+        background: #4f456b;
     }
 
     .dropdown-menu-item.active {

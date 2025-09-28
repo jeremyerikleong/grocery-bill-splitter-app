@@ -47,8 +47,6 @@
 
      <!-- receipt name -->
      <div>
-      <h3 class="title">{{ t('M000032') /* receipt name */ }}</h3>
-
       <label class="">{{ t('M000032') /* receipt name */ }}:</label>
       <input v-if="!formGenerated"
         type="text"
@@ -57,21 +55,16 @@
       />
     </div>
 
-    <br />
-
      <!-- date picker -->
     <div>
-      <h3 class="title">{{ t('M000035') /* receipt date */ }}</h3>
-
       <label>{{ t('M000035') /* receipt date */ }}:</label>
       <input
         type="date"
         v-model="receiptDate"
         :max="new Date().toISOString().split('T')[0]" 
+        :placeholder="t('M000037') /* dd/mm/yyyy */"
       />
     </div>
-
-    <br />
     
     <!-- total bill -->
     <TotalBill @total-amount="fetchTotalAmount" />

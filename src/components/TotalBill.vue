@@ -1,9 +1,6 @@
 <template>
     <div class="container">
-        <h3 class="title">{{ t('M000012') /* total amount */ }}</h3>
-
         <label>{{ t('M000012') /* total amount */ }}:</label>
-        
         <input
             type="number"
             v-model.number="totalAmount"
