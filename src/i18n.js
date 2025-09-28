@@ -33,6 +33,11 @@ const messages = {
         M000029: 'choose participants',
         M000030: 'add expenses',
         M000031: 'subtract expenses',
+        M000032: 'receipt name',
+        M000033: 'enter receipt name',
+        M000034: 'receipt name cannot be empty',
+        M000035: 'receipt date',
+        M000036: 'please select a date',
     },
     cn: {
         M000001: '语言',
@@ -66,6 +71,11 @@ const messages = {
         M000029: '选择参与者',
         M000030: '添加费用',
         M000031: '减去费用',
+        M000032: '收据名称',
+        M000033: '输入收据名称',
+        M000034: '收据名称不能为空',
+        M000035: '收据数据',
+        M000036: '请选择日期',
     },
 }
 

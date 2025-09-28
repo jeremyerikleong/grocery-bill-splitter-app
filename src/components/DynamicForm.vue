@@ -27,22 +27,53 @@
 
   <!-- participants name and total amount input -->
   <div v-if="count > 0 && !formGenerated" class="box box1">
-    <h3 class="title">{{ t('M000004') /* customize participant names */ }}</h3>
-
-    <div class="input-form">
-      <div
-        v-for="(name, index) in fieldNames"
-        :key="'name-'+index"
-      >
-        <label>{{ t('M000006' /* participant */)}} {{ index + 1 }}:</label>
-        <input
-          type="text"
-          v-model="fieldNames[index]"
-          :placeholder="t('M000007' /* enter participant name */)"
-        />
+    <div>
+      <h3 class="title">{{ t('M000004') /* customize participant names */ }}</h3>
+  
+      <div class="input-form">
+        <div
+          v-for="(name, index) in fieldNames"
+          :key="'name-'+index"
+        >
+          <label>{{ t('M000006' /* participant */)}} {{ index + 1 }}:</label>
+          <input
+            type="text"
+            v-model="fieldNames[index]"
+            :placeholder="t('M000007' /* enter participant name */)"
+          />
+        </div>
       </div>
     </div>
 
+     <!-- receipt name -->
+     <div>
+      <h3 class="title">{{ t('M000032') /* receipt name */ }}</h3>
+
+      <label class="">{{ t('M000032') /* receipt name */ }}:</label>
+      <input v-if="!formGenerated"
+        type="text"
+        v-model="receiptName"
+        :placeholder="t('M000033' /* enter receipt name */)"
+      />
+    </div>
+
+    <br />
+
+     <!-- date picker -->
+    <div>
+      <h3 class="title">{{ t('M000035') /* receipt date */ }}</h3>
+
+      <label>{{ t('M000035') /* receipt date */ }}:</label>
+      <input
+        type="date"
+        v-model="receiptDate"
+        :max="new Date().toISOString().split('T')[0]" 
+      />
+    </div>
+
+    <br />
+    
+    <!-- total bill -->
     <TotalBill @total-amount="fetchTotalAmount" />
 
     <button
@@ -77,6 +108,18 @@
   <!-- receipt -->
   <div v-if="formGenerated" class="box box3">
     <h3 class="title receipt">{{ t('M000015') /* receipt */}}</h3>
+
+    <div class="input-form">
+      <div class="participant-layout">
+        <h3>{{ t('M000032') /* receipt name */}}: </h3>
+        <p>{{ receiptName }}</p>
+      </div>
+
+      <div class="participant-layout">
+        <h3>{{ t('M000035') /* receipt date */}}: </h3>
+        <p class="amount">{{ formatDate(receiptDate) }}</p>
+      </div>
+    </div>
 
     <div class="receipt-divider">
         <div class="divider-dot span-1"></div>
@@ -125,6 +168,9 @@
   const confirmationModalIsVisible = ref(false);
   const modalMessage = ref('');
   const participantTotals = ref([]);
+  const receiptName = ref('');
+  const receiptDate = ref('');
+
 
   watch(count, (newCount) => {
     if (!formGenerated.value) {
@@ -137,14 +183,26 @@
   });
 
   function generateForm() {
-    if (totalAmount.value <= 0) {
-      modalMessage.value = t('M000016' /* please enter your amount */);
+    if (fieldNames.value.some(name => name.trim() === "")) {
+      modalMessage.value = t('M000017' /* participant names cannot be empty */);
       reminderModalIsVisible.value = true;
       return;
     }
 
-    if (fieldNames.value.some(name => name.trim() === "")) {
-      modalMessage.value = t('M000017' /* participant names cannot be empty */);
+    if (receiptName.value == "") {
+      modalMessage.value = t('M000034' /* receipt name cannot be empty */);
+      reminderModalIsVisible.value = true;
+      return;
+    }
+
+    if (receiptDate.value === "") {
+      modalMessage.value = t('M000036' /* please select a date */);
+      reminderModalIsVisible.value = true;
+      return;
+    }
+
+    if (totalAmount.value <= 0) {
+      modalMessage.value = t('M000016' /* please enter your amount */);
       reminderModalIsVisible.value = true;
       return;
     }
@@ -166,6 +224,8 @@
     totalAmount.value = 0;
     comparingTotalAmount.value = 0;
     confirmationModalIsVisible.value = false;
+    receiptName.value = "";
+    receiptDate.value = "";
   }
 
   function fetchTotalAmount(amount) {
@@ -188,7 +248,13 @@
     }else{
       comparingTotalAmount.value -= amount;
     }
-}
+  }
+
+  function formatDate(date) {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleDateString('en-GB');
+  }
 </script>
 
 <style scoped>  
@@ -307,7 +373,7 @@
     align-items: center;
     width: 100%;
     height: 3px;
-    margin-block: 2rem;
+    margin-bottom: 2rem;
     background-image: linear-gradient(to right, #888 50%, transparent 50%);
     background-size: 24px 2px;
     background-repeat: repeat-x;

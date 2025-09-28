@@ -36,7 +36,7 @@
                 <div class="checkbox-group">
                     <div v-for="(name, index) in fieldNames" :key="'checkbox-'+index">
                         <input
-                            type="radio"
+                            type="checkbox"
                             :id="'participant-'+index"
                             v-model="localSelectedParticipants"
                             :value="index"
@@ -117,6 +117,11 @@
         border-radius: 8px;
         border: none;
         outline: none;
+
+        &[type="checkbox"], &[type="radio"] {
+            accent-color: #edc08c;
+            cursor: pointer;
+        }
     }
 
     .btn {
