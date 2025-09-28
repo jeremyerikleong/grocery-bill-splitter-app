@@ -3,40 +3,46 @@
         <h3 class="title">{{ t('M000024') /* expenses */ }}</h3>
 
         <div class="calculator-input">
-            <label>{{ t('M000025') /* expense amount */ }}:</label>
-            <input type="number" v-model.number="localExpenseAmount" min="0" />
-
-            <label>{{ t('M000026') /* choose operation */ }}:</label>
             <div>
-                <label>
-                    <input
-                        type="radio"
-                        value="add"
-                        v-model="localOperation"
-                    />
-                    {{ t('M000027') /* add */ }}
-                </label>
-
-                <label>
-                    <input
-                        type="radio"
-                        value="subtract"
-                        v-model="localOperation"
-                    />
-                    {{ t('M000028') /* subtract */ }}
-                </label>
+                <label class="title">{{ t('M000025') /* expense amount */ }}:</label>
+                <input type="number" v-model.number="localExpenseAmount" min="0" />
             </div>
 
-            <label>{{ t('M000029') /* choose participants */ }}:</label>
-            <div class="checkbox-group">
-                <div v-for="(name, index) in fieldNames" :key="'checkbox-'+index">
-                    <input
-                        type="radio"
-                        :id="'participant-'+index"
-                        v-model="localSelectedParticipants"
-                        :value="index"
-                    />
-                    <label :for="'participant-'+index">{{ name || t('M000006') + (index + 1) }}</label>
+            <div>
+                <label class="title">{{ t('M000026') /* choose operation */ }}:</label>
+                <div>
+                    <label>
+                        <input
+                            type="radio"
+                            value="add"
+                            v-model="localOperation"
+                        />
+                        {{ t('M000027') /* add */ }}
+                    </label>
+    
+                    <label>
+                        <input
+                            type="radio"
+                            value="subtract"
+                            v-model="localOperation"
+                        />
+                        {{ t('M000028') /* subtract */ }}
+                    </label>
+                </div>
+            </div>
+
+            <div >
+                <label class="title">{{ t('M000029') /* choose participants */ }}:</label>
+                <div class="checkbox-group">
+                    <div v-for="(name, index) in fieldNames" :key="'checkbox-'+index">
+                        <input
+                            type="radio"
+                            :id="'participant-'+index"
+                            v-model="localSelectedParticipants"
+                            :value="index"
+                        />
+                        <label :for="'participant-'+index">{{ name || t('M000006') + (index + 1) }}</label>
+                    </div>
                 </div>
             </div>
 
@@ -89,9 +95,14 @@
         margin-block: 1rem;
     }
 
-    .title {
+    label {
         text-transform: capitalize;
+        margin-right: 0.75rem;
+    }
+
+    .title {
         margin-top: 0;
+        text-transform: capitalize;
     }
 
     .calculator-input {
@@ -122,6 +133,7 @@
     }
 
     .btn-primary {
+        margin-top: 2rem; 
         color: #edc08c;
         background-color: #48426D;
     }
