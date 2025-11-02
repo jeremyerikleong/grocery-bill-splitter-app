@@ -39,6 +39,9 @@ const messages = {
         M000035: 'receipt date',
         M000036: 'please select a date',
         M000037: 'dd/mm/yyyy',
+        M000038: 'recipient name',
+        M000039: 'enter recipient name',
+        M000040: 'recipient name cannot be empty',
     },
     cn: {
         M000001: '语言',
@@ -78,6 +81,9 @@ const messages = {
         M000035: '收据数据',
         M000036: '请选择日期',
         M000037: '日/月/年',
+        M000038: '收据人姓名',
+        M000039: '输入收据人姓名',
+        M000040: '收据人姓名不能为空',
     },
 }
 

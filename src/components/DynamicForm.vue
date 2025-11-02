@@ -45,6 +45,15 @@
       </div>
     </div>
 
+    <!-- recipient name -->
+    <div>
+      <label class="">{{ t('M000038') /* recipient name */ }}:</label>
+      <input v-if="!formGenerated"
+        type="text"
+        v-model="recipientName"
+        :placeholder="t('M000039' /* enter recipient name */)">
+    </div>
+
      <!-- receipt name -->
      <div>
       <label class="">{{ t('M000032') /* receipt name */ }}:</label>
@@ -103,6 +112,11 @@
     <h3 class="title receipt">{{ t('M000015') /* receipt */}}</h3>
 
     <div class="input-form">
+      <div class="participant-layout">
+        <h3>{{ t('M000038') /* recipient name */}}: </h3>
+        <p>{{ recipientName }}</p>
+      </div>
+
       <div class="participant-layout">
         <h3>{{ t('M000032') /* receipt name */}}: </h3>
         <p>{{ receiptName }}</p>
@@ -163,7 +177,7 @@
   const participantTotals = ref([]);
   const receiptName = ref('');
   const receiptDate = ref('');
-
+  const recipientName = ref('');
 
   watch(count, (newCount) => {
     if (!formGenerated.value) {
@@ -184,6 +198,12 @@
 
     if (receiptName.value == "") {
       modalMessage.value = t('M000034' /* receipt name cannot be empty */);
+      reminderModalIsVisible.value = true;
+      return;
+    }
+
+     if (recipientName.value == "") {
+      modalMessage.value = t('M000040' /* recipient name cannot be empty */);
       reminderModalIsVisible.value = true;
       return;
     }
@@ -219,6 +239,7 @@
     confirmationModalIsVisible.value = false;
     receiptName.value = "";
     receiptDate.value = "";
+    recipientName.value = "";
   }
 
   function fetchTotalAmount(amount) {
