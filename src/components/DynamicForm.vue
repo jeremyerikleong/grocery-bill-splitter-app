@@ -96,7 +96,7 @@
 
     <div class="box-with-flex">
       <h3 class="readonly">{{ t('M000023' /* comparing amount */) }}</h3>
-      <h3 class="readonly">RM {{ Math.round(comparingTotalAmount).toFixed(2) }}</h3>
+      <h3 class="readonly">RM {{ (comparingTotalAmount).toFixed(2) }}</h3>
     </div>
   </div>
 
@@ -142,7 +142,7 @@
       >
         <h3>{{ fieldNames[index] || t('M000006') /* participants */ + (index + 1) }} </h3>
         <p class="amount">
-          RM {{ participantTotals[index].toFixed(2) }}
+          RM {{ participantTotals[index].toFixed(4) }}
         </p>
       </div>
     </div>
