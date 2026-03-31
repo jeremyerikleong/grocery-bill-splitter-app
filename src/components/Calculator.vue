@@ -41,7 +41,7 @@
                             v-model="localSelectedParticipants"
                             :value="index"
                         />
-                        <label :for="'participant-'+index">{{ name || t('M000006') + (index + 1) }}</label>
+                        <label :for="'participant-'+index" class="checkbox-item">{{ name || t('M000006') + (index + 1) }}</label>
                     </div>
                 </div>
             </div>
@@ -147,5 +147,9 @@
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
+    }
+
+    .checkbox-item {
+        cursor: pointer;
     }
 </style>

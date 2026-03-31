@@ -60,6 +60,7 @@
     .modal-title {
         margin-top: 0;
         margin-bottom: 2rem;
+        text-transform: capitalize;
     }
 
     .modal-message {
